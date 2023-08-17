@@ -28,6 +28,22 @@ class UsersController {
 
     return res.status(201).json()
   }
+
+  async show(req, res) {
+    const { email } = req.params
+
+    const database = await sqliteConnection()
+
+    const user = await database.get('SELECT * FROM users WHERE email = (?)', [
+      email
+    ])
+
+    if (!user) {
+      throw new AppError('Usuário não encontrado.')
+    }
+
+    return res.json(user)
+  }
 }
 
 module.exports = UsersController
