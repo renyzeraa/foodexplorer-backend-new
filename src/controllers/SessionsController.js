@@ -40,3 +40,5 @@ class SessionsController {
     return response.status(201).json({ user, token });
   }
 }
+
+module.exports = SessionsController;
