@@ -6,20 +6,17 @@ exports.up = function (knex) {
       table.text("name").notNullable().unique();
     })
     .then(function () {
+      //inserir alguns valores inicias, porém sera adicionado mais conforme o usuário informe novos.
       return knex.raw(`
       INSERT INTO ingredients (name)
       VALUES
-        ("pão"),
-        ("cheddar"),
         ("alho"),
         ("cebola"),
         ("sal"),
         ("tomate"),
         ("maionese"),
         ("pepino"),
-        ("carne moida"),
         ("queijo"),
-        ("picanha"),
         ("molho de tomate"),
         ("muçarela"),
         ("presunto"),
@@ -27,26 +24,15 @@ exports.up = function (knex) {
         ("azeitona"),
         ("orégano"),
         ("azeite de oliva"),
-        ("manjericão"),
         ("requeijão"),
-        ("mussarela de búfala"),
-        ("tomate seco"),
-        ("atum"),
         ("milho"),
-        ("catupiry"),
-        ("pimentão"),
         ("linguiça"),
         ("ovo"),
         ("brócolis"),
         ("palmito"),
         ("ervilha"),
-        ("pimenta calabresa"),
-        ("queijo gorgonzola"),
-        ("azeitona preta"),
-        ("rúcula"),
         ("frango"),
-        ("abacaxi"),
-        ("camarão"),
+        ("abacaxi")
     `);
     });
 };
