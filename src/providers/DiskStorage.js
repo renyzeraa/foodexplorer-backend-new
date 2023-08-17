@@ -17,7 +17,7 @@ class DiskStorage {
     try {
       await fs.promises.stat(filePath);
     } catch (e) {
-      console.error("Erro no DiskSotage ==> ", e);
+      console.error("Error =>", e);
       return false;
     }
     await fs.promises.unlink(filePath);
