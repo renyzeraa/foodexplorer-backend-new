@@ -2,7 +2,17 @@ const { hash, compare } = require('bcryptjs')
 const sqliteConnection = require('../database/sqlite')
 const AppError = require('../utils/AppError')
 
+/**
+ * Classe que lida com os dados do usuário
+ */
 class UsersController {
+
+  /**
+   * Cria um novo usuário
+   * @param {Object} req 
+   * @param {Object} res 
+   * @returns json
+   */
   async create(req, res) {
     const { name, email, password, isAdmin } = req.body
 
@@ -29,6 +39,12 @@ class UsersController {
     return res.status(201).json()
   }
 
+  /**
+   * Retorna os dados para mostrar o usuário
+   * @param {Object} req 
+   * @param {Object} res 
+   * @returns json
+   */
   async show(req, res) {
     const { email } = req.params
 
@@ -45,6 +61,12 @@ class UsersController {
     return res.json(user)
   }
 
+  /**
+   * Método que define a alteração do usuário
+   * @param {Object} req 
+   * @param {Object} res 
+   * @deprecated No momento não esta sendo utilizado, pois não foi feita a página para editar o perfil do usuário
+   */
   async update(req, res) {
     try {
       const { name, email, password, old_password, isAdmin } = req.body
