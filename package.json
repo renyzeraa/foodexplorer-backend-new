@@ -1,0 +1,14 @@
+{
+  "name": "foodexplorer-backend-new",
+  "version": "1.0.0",
+  "description": "Backend da aplicação food explorer, feita em Node.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
