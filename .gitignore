@@ -2,3 +2,5 @@ node_modules
 .env
 example.json
 database.db
+.vscode
+*.png
