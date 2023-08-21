@@ -38,7 +38,6 @@ class FavoritesController {
     await knex('favorite_plates').insert({ user_id, plate_id });
   }
   
-  
   async findFavoritePlate(user_id, plate_id) {
     return await knex('favorite_plates')
     .where({ user_id, plate_id })

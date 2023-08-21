@@ -11,7 +11,7 @@ exports.up = (knex) =>
     table.foreign("user_id").references("users.id");
     table
       .foreign("category_id")
-      .references("categories.id")
+      .references("category.id")
       .onDelete("CASCADE");
     table.timestamp("created_at").default(knex.fn.now());
     table.timestamp("updated_at").default(knex.fn.now());

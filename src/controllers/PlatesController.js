@@ -8,7 +8,6 @@ class PlatesController {
     const user_id = req.user.id
     const picture = req.file.filename
     const diskStorage = new DiskStorage()
-
     const filePlate = await diskStorage.saveFile(picture)
 
     if (!req.file) {

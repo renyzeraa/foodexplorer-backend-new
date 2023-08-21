@@ -1,12 +1,12 @@
 exports.up = function (knex) {
   return knex.schema
-    .createTable("categories", function (table) {
+    .createTable("category", function (table) {
       table.increments("id").primary();
       table.text("name").notNullable().unique();
     })
     .then(function () {
       return knex.raw(`
-      INSERT INTO categories (name)
+      INSERT INTO category (name)
       VALUES
         ("refeicao"),
         ("sobremesa"),
@@ -16,4 +16,4 @@ exports.up = function (knex) {
     });
 };
 
-exports.down = (knex) => knex.schema.dropTableIfExists("categories");
+exports.down = (knex) => knex.schema.dropTableIfExists("category");
