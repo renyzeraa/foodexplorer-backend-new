@@ -78,7 +78,8 @@ class OrdersController {
           'orders.total_value',
           'orders.created_at',
           'orders.user_id',
-          'order_statuses.status'
+          'order_statuses.status',
+          'orders.status_id'
         )
         .leftJoin('order_statuses', 'orders.status_id', 'order_statuses.id')
         .where('orders.user_id', request.user.id)
@@ -106,7 +107,8 @@ class OrdersController {
           'orders.total_value',
           'orders.created_at',
           'orders.user_id',
-          'order_statuses.status'
+          'order_statuses.status',
+          'orders.status_id'
         )
         .leftJoin('order_statuses', 'orders.status_id', 'order_statuses.id')
         .where('orders.id', id)
