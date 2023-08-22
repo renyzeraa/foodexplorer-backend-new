@@ -16,5 +16,4 @@ exports.up = knex =>
 
 exports.down = async knex => {
   await knex.schema.dropTableIfExists('orders')
-  await knex.schema.dropTableIfExists('order_statuses')
 }
