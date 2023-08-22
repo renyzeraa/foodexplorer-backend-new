@@ -17,22 +17,4 @@ ordersRoutes.get(
   ordersController.index
 );
 
-ordersRoutes.get(
-  "/:id", 
-  ensureAuthenticated, 
-  ordersController.show 
-);
-
-ordersRoutes.put(
-  "/:id", 
-  ensureAuthenticated, 
-  ordersController.update
-);
-
-ordersRoutes.delete(
-  "/:id", 
-  ensureAuthenticated, 
-  ordersController.delete
-);
-
 module.exports = ordersRoutes;

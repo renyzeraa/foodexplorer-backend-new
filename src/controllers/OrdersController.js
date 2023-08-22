@@ -1,11 +1,20 @@
 const { validationResult } = require('express-validator')
 const knex = require('../database/knex')
 
+/**
+ * Gera um código de pedido único.
+ * @returns {string} - O código gerado.
+ */
 function getIdOrder() {
   const randomNumber = Math.floor(100000 + Math.random() * 900000)
   return randomNumber.toString()
 }
 
+/**
+ * Atualiza automaticamente o status de um pedido em intervalos regulares.
+ * @param {Object} knex - Instância do Knex.js para acesso ao banco de dados.
+ * @param {number} orderId - O ID do pedido a ser atualizado automaticamente.
+ */
 async function updateStatusAutomatically(knex, orderId) {
   const statusIds = [1, 2, 3] 
   let currentIndex = 0
@@ -28,7 +37,16 @@ async function updateStatusAutomatically(knex, orderId) {
   }, 5 * 60 * 1000)
 }
 
+/**
+ * Controlador de pedidos que lida com a criação de novos pedidos.
+ */
 class OrdersController {
+
+  /**
+   * Cria um novo pedido.
+   * @param {Object} req - Objeto de solicitação HTTP.
+   * @param {Object} res - Objeto de resposta HTTP.
+   */
   async create(req, res) {
     try {
       const errors = validationResult(req)
@@ -44,8 +62,6 @@ class OrdersController {
           error: 'Dados incompletos'
         })
       }
-
-      const plateIds = plates
 
       const code = getIdOrder()
 
@@ -68,21 +84,44 @@ class OrdersController {
     }
   }
 
+  /**
+   * Mostra todo os pedidos.
+   * @param {Object} req - Objeto de solicitação HTTP.
+   * @param {Object} res - Objeto de resposta HTTP.
+   * @returns 
+   */
   async index(request, response) {
     try {
-      const orders = await knex('orders')
-        .select(
-          'orders.id',
-          'orders.code',
-          'orders.details',
-          'orders.total_value',
-          'orders.created_at',
-          'orders.user_id',
-          'order_statuses.status',
-          'orders.status_id'
-        )
-        .leftJoin('order_statuses', 'orders.status_id', 'order_statuses.id')
-        .where('orders.user_id', request.user.id)
+      let orders = false;
+      if (request.user.isAdmin) {
+        orders = await knex('orders')
+          .select(
+            'orders.id',
+            'orders.code',
+            'orders.details',
+            'orders.total_value',
+            'orders.created_at',
+            'orders.user_id',
+            'order_statuses.status',
+            'orders.status_id'
+          )
+          .leftJoin('order_statuses', 'orders.status_id', 'order_statuses.id')
+      }
+      else {
+        orders = await knex('orders')
+          .select(
+            'orders.id',
+            'orders.code',
+            'orders.details',
+            'orders.total_value',
+            'orders.created_at',
+            'orders.user_id',
+            'order_statuses.status',
+            'orders.status_id'
+          )
+          .leftJoin('order_statuses', 'orders.status_id', 'order_statuses.id')
+          .where('orders.user_id', request.user.id)
+      }
 
       const ordersWithPlates = orders.map(order => {
         return { ...order }
@@ -92,85 +131,6 @@ class OrdersController {
     } catch (error) {
       console.error(error)
       return response.status(500).json({ error: 'Erro ao listar os pedidos' })
-    }
-  } 
-
-  async show(request, response) {
-    const { id } = request.params
-
-    try {
-      const order = await knex('orders')
-        .select(
-          'orders.id',
-          'orders.code',
-          'orders.details',
-          'orders.total_value',
-          'orders.created_at',
-          'orders.user_id',
-          'order_statuses.status',
-          'orders.status_id'
-        )
-        .leftJoin('order_statuses', 'orders.status_id', 'order_statuses.id')
-        .where('orders.id', id)
-        .first()
-
-      if (!order) {
-        return response.status(404).json({ error: 'Pedido não encontrado' })
-      }
-
-      return response.json(order)
-    } catch (error) {
-      console.error(error)
-      return response
-        .status(500)
-        .json({ error: 'Erro ao buscar os detalhes do pedido' })
-    }
-  }
-
-  async update(request, response) {
-    const { id } = request.params
-    const { details, plates, total_value } = request.body
-
-    try {
-      const existingOrder = await knex('orders').where('id', id).first()
-
-      if (!existingOrder) {
-        return response.status(404).json({ error: 'Pedido não encontrado' })
-      }
-
-      const updatedTotalValue =
-        total_value !== undefined ? total_value : existingOrder.total_value
-
-      await knex('orders').where('id', id).update({
-        details,
-        total_value: updatedTotalValue
-      })
-
-      const updatedOrder = await knex('orders').where('id', id).first()
-
-      return response.json(updatedOrder)
-    } catch (error) {
-      console.error(error)
-      return response.status(500).json({ error: 'Erro ao atualizar o pedido' })
-    }
-  }
-
-  async delete(request, response) {
-    const { id } = request.params
-
-    try {
-      const existingOrder = await knex('orders').where('id', id).first()
-
-      if (!existingOrder) {
-        return response.status(404).json({ error: 'Pedido não encontrado' })
-      }
-
-      await knex('orders').where('id', id).del()
-
-      return response.status(204).end()
-    } catch (error) {
-      console.error(error)
-      return response.status(500).json({ error: 'Erro ao excluir o pedido' })
     }
   } 
 }
