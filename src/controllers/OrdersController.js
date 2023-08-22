@@ -61,13 +61,6 @@ class OrdersController {
 
       updateStatusAutomatically(knex, orderId)
 
-      const orderItems = plateIds.map(plates => ({
-        order_id: orderId,
-        plates_id: plates
-      }))
-
-      await knex('order_items').insert(orderItems)
-
       return res.status(201).json({ id: orderId })
     } catch (error) {
       console.error('Error creating order:', error)
@@ -90,16 +83,8 @@ class OrdersController {
         .leftJoin('order_statuses', 'orders.status_id', 'order_statuses.id')
         .where('orders.user_id', request.user.id)
 
-      const orderIds = orders.map(order => order.id)
-
-      const plates = await knex('order_items')
-        .select('order_items.order_id', 'plates.*')
-        .whereIn('order_items.order_id', orderIds)
-        .leftJoin('plates', 'order_items.plates_id', 'plates.id')
-
       const ordersWithPlates = orders.map(order => {
-        const orderPlates = plates.filter(plate => plate.order_id === order.id)
-        return { ...order, plates: orderPlates }
+        return { ...order }
       })
 
       return response.json(ordersWithPlates)
@@ -159,17 +144,6 @@ class OrdersController {
         total_value: updatedTotalValue
       })
 
-      if (plates && Array.isArray(plates)) {
-        await knex('order_items').where('order_id', id).delete()
-
-        const orderItems = plates.map(plate => ({
-          order_id: id,
-          plates_id: plate
-        }))
-
-        await knex('order_items').insert(orderItems)
-      }
-
       const updatedOrder = await knex('orders').where('id', id).first()
 
       return response.json(updatedOrder)
@@ -189,8 +163,6 @@ class OrdersController {
         return response.status(404).json({ error: 'Pedido não encontrado' })
       }
 
-      await knex('order_items').where('order_id', id).del()
-
       await knex('orders').where('id', id).del()
 
       return response.status(204).end()
@@ -198,7 +170,7 @@ class OrdersController {
       console.error(error)
       return response.status(500).json({ error: 'Erro ao excluir o pedido' })
     }
-  }
+  } 
 }
 
 module.exports = OrdersController
