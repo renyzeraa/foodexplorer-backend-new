@@ -2,7 +2,16 @@ const DiskStorage = require('../providers/DiskStorage')
 const AppError = require('../utils/AppError')
 const knex = require('../database/knex')
 
+/**
+ * Controlador para a gestão de pratos.
+ */
 class PlatesController {
+
+  /**
+   * Cria um novo prato com os dados fornecidos.
+   * @param {Object} req - Objeto de solicitação HTTP.
+   * @param {Object} res - Objeto de resposta HTTP.
+   */
   async create(req, res) {
     const { title, description, value, ingredients, category } = req.body
     const user_id = req.user.id
@@ -73,6 +82,11 @@ class PlatesController {
     return res.json({ plate_id: plate })
   }
 
+  /**
+   * Obtém os detalhes de um prato específico.
+   * @param {Object} req - Objeto de solicitação HTTP.
+   * @param {Object} res - Objeto de resposta HTTP.
+   */
   async show(req, res) {
     const { id } = req.params
 
@@ -85,12 +99,22 @@ class PlatesController {
     return res.json(plate)
   }
 
+  /**
+   * Lista todos os pratos disponíveis.
+   * @param {Object} req - Objeto de solicitação HTTP.
+   * @param {Object} res - Objeto de resposta HTTP.
+   */
   async index(req, res) {
     const plates = await knex('plates').select('*')
 
     return res.json(plates)
   }
 
+  /**
+   * Atualiza os detalhes de um prato existente com os dados fornecidos.
+   * @param {Object} req - Objeto de solicitação HTTP.
+   * @param {Object} res - Objeto de resposta HTTP.
+   */
   async update(req, res) {
     const { id } = req.params
     const { title, description, value, ingredients, category } = req.body
@@ -124,10 +148,12 @@ class PlatesController {
         updateData.value = formattedValue
       }
 
+      // tratamento para os ingredientes
       if (ingredients) {
         const ingredientIds = []
         const ingredientSplit = ingredients.split(',')
 
+        // como existe uma tabela para ingredients e por padrão ela já possui alguns valores setados ao criar, caso o usuário digite um ingrediente que não esta cadastrado, ira adicioná-lo
         await Promise.all(
           ingredientSplit.map(async (item) => {
             const trimmedItem = item.trim();
@@ -158,6 +184,11 @@ class PlatesController {
     return res.json({ success: true })
   }
 
+  /**
+   * Pesquisa pratos com base em um título fornecido.
+   * @param {Object} req - Objeto de solicitação HTTP.
+   * @param {Object} res - Objeto de resposta HTTP.
+   */
   async search(req, res) {
     const { title } = req.query
 
@@ -168,6 +199,11 @@ class PlatesController {
     return res.json(plates)
   }
 
+  /**
+   * Exclui um prato existente.
+   * @param {Object} req - Objeto de solicitação HTTP.
+   * @param {Object} res - Objeto de resposta HTTP.
+   */
   async delete(req, res) {
     const { id } = req.params
     const user_id = req.user.id
