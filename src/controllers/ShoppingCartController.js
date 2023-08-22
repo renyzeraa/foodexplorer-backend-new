@@ -1,6 +1,15 @@
 const knex = require('../database/knex')
 
+/**
+ * Controlador para exibir detalhes de um carrinho de compras específico.
+ */
 class ShoppingCartController {
+
+  /**
+   * Exibe detalhes de um carrinho de compras com base no ID do pedido.
+   * @param {Object} request - Objeto de solicitação HTTP.
+   * @param {Object} response - Objeto de resposta HTTP.
+   */
   async show(request, response) {
     try {
       const { id } = request.params
@@ -23,7 +32,8 @@ class ShoppingCartController {
         .where('orders.id', id)
         .andWhere('orders.user_id', userId)
         .first()
-
+        
+      // Verifica se o pedido existe para o usuário atual.
       if (!orders) {
         return response.status(404).json({
           error:
@@ -42,7 +52,8 @@ class ShoppingCartController {
         .join('orders', 'orders.id', 'order_items.order_id')
         .join('plates', 'order_items.plates_id', 'plates.id')
         .where('orders.id', id)
-
+        
+      // Combina as informações do pedido com os pratos para criar uma resposta completa.
       const orderWithPlates = {
         ...orders,
         plates
