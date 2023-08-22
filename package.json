@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "pm2-runtime start ecosystem.config.js --env production",
-    "migrate": "knex migrate:latest ",
+    "migrate": "knex migrate:latest",
     "create-migrate": "npx knex migrate:make",
+    "rollback": "knex migrate:rollback --all && knex migrate:latest",
     "dev": "nodemon ./src/app"
   },
   "author": "",
