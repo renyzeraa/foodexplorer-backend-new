@@ -46,6 +46,8 @@ http://localhost:3333/
 
 <a href='https://foodexplorer-eight.vercel.app/' target='_blank'>foodexplorer-eight.vercel.app/</a>
 
+<a href='https://github.com/renyzeraa/foodexplorer-frontend' target='_blank'>Projeto no Github</a>
+
 ### Contato
 
 <img align="left" src="https://www.github.com/renyzeraa.png?size=150">
