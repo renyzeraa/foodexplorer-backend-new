@@ -14,8 +14,8 @@ class UsersController {
    * @returns json
    */
   async create(req, res) {
-    const { name, email, password, isAdmin } = req.body
-
+    let { name, email, password, isAdmin } = req.body
+   
     const database = await sqliteConnection()
 
     const checkUserExists = await database.get(
@@ -23,17 +23,22 @@ class UsersController {
       [email]
     )
 
+    const iCountUsers = await database.get(
+      'SELECT COUNT(1) as iQtd FROM users'
+    )
+    // o primeiro usuário a se cadastrar sempre sera o admin
+    isAdmin = iCountUsers.iQtd == 0 ? true : false;
+
     if (checkUserExists) {
       throw new AppError('Este e-mail já está em uso.')
     }
 
     const hashPassword = await hash(password, 8)
-    const userIsAdmin = isAdmin === true 
 
     await database.run(
       `INSERT INTO users (NAME, email, password, isAdmin)
             VALUES (?, ?, ?, ?)`,
-      [name, email, hashPassword, userIsAdmin]
+      [name, email, hashPassword, !!isAdmin]
     )
 
     return res.status(201).json()
