@@ -1,20 +1,28 @@
-# Back-end do App Food Explorer
+# Back-end do App Food Explorer 🥞🥓🥜😋
 
 Após realizado revisão, foi pedido para que o backend fosse refeito.
 
 Projeto final do Curso Explorer da RocketSeat, neste desafio, desenvolvi o food explorer, um menu interativo para um restaurante fictício, que funciona com layout mobile, tablet e desktop. Este projeto utiliza API própria no qual é este repositório.
 
-<strong> Obs: branch sofreu alterações e acabou não sendo salva por algum motivo os commits anteriores.</strong>
-
-</br>
-
 # Deploy online na rota:
 
 ```
-COLOCAR NOVO LINK AQUI
+https://foodexplorer-new-backend.onrender.com
 ```
 
-Comandos para testar o back-end localmente (em localhost)
+Para iniciar o projeto, abra o terminal
+
+```
+git clone https://github.com/renyzeraa/foodexplorer-backend-new.git
+```
+
+Instale os pacotes de dependências
+
+```
+npm install
+```
+
+- Comandos para testar o back-end localmente (em localhost)
 
 Baixar as migrations para ter todo o banco de dados padrão
 
@@ -22,14 +30,16 @@ Baixar as migrations para ter todo o banco de dados padrão
 npm run migrate
 ```
 
-### _Para testar as chamadas é obrigatoriamente ter pelo menos um usuario criado e cadastrado no banco de dados, pois tem middleware de autenticação para criação de pratos, favoritos entre outras rotas_
+### _Para testar as chamadas é obrigatoriamente ter pelo menos um usuário criado e cadastrado no banco de dados, pois tem middleware de autenticação para criação de pratos, favoritos entre outras rotas_
 
 </br>
 
 E para rodar o servidor e coloque a seguinte url em qualquer navegador:
 
+**cheque a rota no código sempre, mas é para ser 3333 **
+
 ```
-http://localhost:3000/
+http://localhost:3333/
 ```
 
 ### Deploy Front-end do Projeto 🚀
